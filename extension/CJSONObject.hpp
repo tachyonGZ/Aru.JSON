@@ -1,14 +1,18 @@
+#pragma once
+
 #include <nlohmann/json.hpp>
 
 #include <fstream>
 #include <stack>
 #include <string>
 
+namespace aru{
+
 class CJSONObject
 {
 public:
 	CJSONObject();
-	CJSONObject &ParseFromFile(std::ifstream fs);
+	CJSONObject &ParseFromFile(std::ifstream &fs);
 	//CJSONObject &ParseFromString(std::string );
 
 	template<typename T>
@@ -18,7 +22,9 @@ private:
 };
 
 template<typename T>
-T CJSONObject::Get(std::string)
+T CJSONObject::Get(std::string json_ptr)
 {
-	return json_.at(nlohmann::json::json_pointer(ptr));
+	return json_.at(nlohmann::json::json_pointer(json_ptr));
+}
+
 }

@@ -3,16 +3,8 @@
 
 #include "smsdk_ext.h"
 
+#include "CJSONObjectTypeHandle.hpp"
 #include "CJSONObject.hpp"
-
-class JSONTypeHandle : public IHandleTypeDispatch
-{
-public:
-	virtual void OnHandleDestroy(HandleType_t type, void* object)
-	{
-
-	}
-};
 
 class CJSONExtension : public SDKExtension, public SourceMod::IPluginsListener
 {
@@ -24,7 +16,7 @@ class CJSONExtension : public SDKExtension, public SourceMod::IPluginsListener
 		* @param late		Whether or not the module was loaded after map load.
 		* @return			True to succeed loading, false to fail.
 	*/
-	virtual bool SDK_OnLoad(char *error, size_t maxlen, bool late) override final;
+	//virtual bool SDK_OnLoad(char *error, size_t maxlen, bool late) override final;
 
 	/**
 		* @brief This is called right before the extension is unloaded.
@@ -53,7 +45,7 @@ class CJSONExtension : public SDKExtension, public SourceMod::IPluginsListener
 	  //virtual void OnPluginLoaded(IPlugin* plugin) override final;
 public:
 	HandleType_t json_object_type_ = 0;
-	JSONTypeHandle json_type_handler_;
+	CJSONObjectTypeHandle json_type_handler_;
 public:
 #if defined SMEXT_CONF_METAMOD
 	/**

@@ -12,11 +12,24 @@ set_target_properties(extension PROPERTIES CXX_STANDARD 20)
 target_compile_options(extension PUBLIC $<$<PLATFORM_ID:Linux>:-m32>)
 target_link_options(extension PUBLIC $<$<PLATFORM_ID:Linux>:-m32>)
 
+if(UNIX)
+	target_compile_definitions(extension
+		PRIVATE $<$<COMPILE_LANGUAGE:CXX>: 
+					GNUC -D_LINUX -DPOSIX -Dstricmp=strcasecmp 
+					-D_stricmp=strcasecmp -D_snprintf=snprintf
+					-D_vsnprintf=vsnprintf -DHAVE_STDINT_H
+					$<$<CONFIG:Debug>: 
+						-DDEBUG 
+					>
+					$<$<CONFIG:Release>: 
+						-DNDEBUG 
+					>
+				>
+	)
+elseif(WIN32)
 target_compile_definitions(extension
 	PRIVATE $<$<COMPILE_LANGUAGE:CXX>: 
-				GNUC -D_LINUX -DPOSIX -Dstricmp=strcasecmp 
-				-D_stricmp=strcasecmp -D_snprintf=snprintf
-				-D_vsnprintf=vsnprintf -DHAVE_STDINT_H
+				GNUC -D_LINUX -DPOSIX -DHAVE_STDINT_H -D_CRT_SECURE_NO_WARNINGS
 				$<$<CONFIG:Debug>: 
 					-DDEBUG 
 				>
@@ -25,8 +38,9 @@ target_compile_definitions(extension
 				>
 			>
 )
-
-
+else()
+	message(FATAL_ERROR "unknown")
+endif()
 
 target_link_libraries(
 	extension 

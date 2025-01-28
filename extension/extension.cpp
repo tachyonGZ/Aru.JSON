@@ -26,10 +26,24 @@ cell_t ObjectParseFromString(IPluginContext* p_context, const cell_t* params)
 	
 }
 
+cell_t ObjectGetInt(IPluginContext* p_context, const cell_t* params)
+{
+	CJSONObject *obj = nullptr;
+	HandleSecurity sec(p_context->GetIdentity(), myself->GetIdentity());
+	handlesys->ReadHandle(params[1], g_json_ext.json_object_type_, &sec, (void **)&obj);
+
+	return reinterpret_cast<cell_t>(obj->Get<int>("123"));
+}
+
 const sp_nativeinfo_t my_natives[] = {
-	{"Aru_JSON.Aru_JSON", ObjectConstructor},
-	{"Aru_JSON.ParseFromFile", ObjectParseFromFile},
-	{"Aru_JSON.ParseFromString", ObjectParseFromString},
+	{"Aru_JSONObject.Aru_JSON", ObjectConstructor},
+	{"Aru_JSONObject.GetBool", ObjectParseFromString},
+	{"Aru_JSONObject.GetFloat", ObjectParseFromString},
+	{"Aru_JSONObject.GetInt", ObjectGetInt},
+	{"Aru_JSONObject.GetString", ObjectParseFromString},
+	{"Aru_JSONObject.ParseFromFile", ObjectParseFromFile},
+	//{"Aru_JSONObject.ParseFromString", ObjectParseFromString},
+	
 	{nullptr, nullptr}
 };
 
